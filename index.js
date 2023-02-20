@@ -3,8 +3,8 @@ const path = require("path");
 const { exec } = require("child_process");
 
 // 填写存放了所有项目仓库的地方
-// const root = "/Users/cary/Desktop/test";
-const root = "/Users/cary/workspace/gitlab";
+const root = "/Users/cary/Desktop/test";
+// const root = "/Users/cary/workspace/gitlab";
 const executeShellCommands = (cmd, options = {}) => {
   return new Promise((res, rej) => {
     exec(
@@ -44,7 +44,7 @@ const main = async (branch = "master", authors = "") => {
         `"./shell.sh" ${dirPath} ${branch} ${_authors}`
       );
       console.log(packageInfo?.name, output);
-      arrs.push(`${packageInfo?.name};${output}`);
+      arrs.push(`${packageInfo?.name} ${output}`);
     } catch (e) {
       console.log(e);
     }
