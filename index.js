@@ -10,7 +10,7 @@ const executeShellCommands = (cmd, options = {}) => {
     exec(
       cmd,
       {
-        timeout: 5000,
+        timeout: 10000,
         ...options,
       },
       (err, stdout, stderr) => {
@@ -37,13 +37,22 @@ const main = async (branch = "master", authors = "") => {
       if (!fs.existsSync(packageInfoPath)) continue;
       const packageInfo = JSON.parse(fs.readFileSync(packageInfoPath));
       if (!fs.existsSync(gitPath)) continue;
+      // await changeGitUrl(gitPath);
+      // const origin = await executeShellCommands(
+      //   `git --git-dir="${gitPath}" config --get remote.origin.url`
+      // );
+      // if (origin.includes("SOS.git")) {
+      //   console.log(origin, dirPath);
+      // }
+      console.log(dirPath)
       const stat2 = await fs.promises.stat(gitPath);
       if (!stat2.isDirectory()) continue;
 
       const _authors = authors.split("|").join(" ");
       const output = await executeShellCommands(
-        `"./shell.sh" ${gitPath} ${branch} ${_authors}`
+        `"./shell.sh" ${dirPath} ${branch} ${_authors}`
       );
+      console.log(output);
       arrs.push(`${packageInfo?.name};${output}`);
     } catch (e) {
       console.log(e);
@@ -53,7 +62,7 @@ const main = async (branch = "master", authors = "") => {
 };
 
 try {
-  main("master", "cary|wangzhangsheng");
+  main("origin/master", "cary|wangzhangsheng");
 } catch (e) {
   console.error("We've thrown! Whoops!", e);
 }

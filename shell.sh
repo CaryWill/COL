@@ -1,10 +1,10 @@
-# # echo $1
-# ssh2http -hs
-# git --git-dir=$1 stash
-# git --git-dir=$1 checkout master 
-# git --git-dir=$1 pull 
-# git --git-dir=$1 fetch 
+cd $1
+# ssh to https
+# origin=$(git remote get-url origin | sed 's/^git@\(.*\):\/*\(.*\).git/https:\/\/\1\/\2.git/')
+
+# https to ssh
+# https=$(git remote get-url origin | sed 's/^git@\(.*\):\/*\(.*\).git/https:\/\/\1\/\2.git/')
+ssh=$(git remote get-url origin | sed 's/^https:\/\/\([^\/]*\)\/\(.*\).git/git@\1\:\2.git/')
 
 # count lines
-git --git-dir=$1 log $2 --author="\($3\|$4\)" --pretty=tformat: --numstat --no-merges --since="1 year ago" | awk "{ add += \$1; subs += \$2; loc += \$1 - \$2 } END { printf \"%s; %s; %s\n\", add, subs, loc }"
-
+git log $2 --author="\($3\|$4\)" --pretty=tformat: --numstat --no-merges --since="1 year ago" -- . ':(exclude)*yarn.lock*' -- . ':(exclude)*package-lock*' -- . ':(exclude)*generated*' -- . ':(exclude)*schemas*' | awk "{ add += \$1; subs += \$2; loc += \$1 - \$2 } END { printf \"%s; %s; %s\n\", add, subs, loc }"
