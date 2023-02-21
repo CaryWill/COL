@@ -62,5 +62,5 @@ const main = async () => {
 try {
   main();
 } catch (e) {
-  console.error("We've thrown! Whoops!", e);
+  console.error("妈的挂了... ", e);
 }
