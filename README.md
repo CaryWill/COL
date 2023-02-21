@@ -1,4 +1,10 @@
-# README
+## Usage
+
+默认从 origin/master 读取代码行数，读取之前会默认执行 git fetch 来保证代码是最新的。
+
+> 1. node index.js
+
+## TODO 
 
 - [x] Commits authored By me(multiple names maybe).
 - [x] Commits commmited 1 year ago.
