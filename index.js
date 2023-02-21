@@ -24,26 +24,32 @@ const executeShellCommands = (cmd, options = {}) => {
   });
 };
 
-const getData = async (branch = "master") => {
-  const arrs = [];
-  const files = await fs.promises.readdir(root);
+const getData = async (branch = "master", arrs = [], dir = root) => {
+  const files = await fs.promises.readdir(dir);
   return new Promise(async (resolve) => {
     for (const file of files) {
       try {
-        const dirPath = path.join(root, file);
+        const dirPath = path.join(dir, file);
         const stat = await fs.promises.stat(dirPath);
         if (!stat.isDirectory()) continue;
-        const gitPath = path.join(dirPath, ".git");
-        const packageInfoPath = path.join(dirPath, "package.json");
-        if (!fs.existsSync(packageInfoPath)) continue;
-        const packageInfo = JSON.parse(fs.readFileSync(packageInfoPath));
-        const stat2 = await fs.promises.stat(gitPath);
-        if (!(fs.existsSync(gitPath) && stat2.isDirectory())) continue;
-        const output = await executeShellCommands(
-          `"./shell.sh" ${dirPath} ${branch}`
-        );
-        console.log(packageInfo?.name, branch, output);
-        arrs.push(`${packageInfo?.name};${output}`);
+        const gitPath = path.join(dirPath, ".git/");
+        if (fs.existsSync(gitPath)) {
+          const output = await executeShellCommands(
+            `"./shell.sh" ${dirPath} ${branch}`
+          );
+          const packageInfoPath = path.join(dirPath, "package.json");
+          let packageInfo = {};
+          if (!fs.existsSync(packageInfoPath)) {
+            packageInfo = {};
+          } else {
+            packageInfo = JSON.parse(fs.readFileSync(packageInfoPath));
+          }
+          console.log(packageInfo?.name, branch, output);
+          arrs.push(`${packageInfo?.name};${output}`);
+        } else {
+          const nested = await getData(branch, arrs, dirPath);
+          arrs.concat(nested);
+        }
       } catch (e) {
         console.log(e);
       }
@@ -54,7 +60,7 @@ const getData = async (branch = "master") => {
 
 const main = async () => {
   // 填写分支, 默认 origin/master
-  const master = await getData("origin/master");
+  const master = await getData("origin/master", [], root);
   fs.writeFileSync("./table.txt", master.join(""));
 };
 
