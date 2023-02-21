@@ -3,8 +3,8 @@ const path = require("path");
 const { exec } = require("child_process");
 
 // 填写存放了所有项目仓库的地方
-// const root = "/Users/cary/Desktop/test";
-const root = "/Users/cary/workspace/gitlab";
+const root = "/Users/cary/Desktop/test";
+// const root = "/Users/cary/workspace/gitlab";
 const executeShellCommands = (cmd, options = {}) => {
   return new Promise((res, rej) => {
     exec(
@@ -37,9 +37,8 @@ const getData = async (branch = "master") => {
         const packageInfoPath = path.join(dirPath, "package.json");
         if (!fs.existsSync(packageInfoPath)) continue;
         const packageInfo = JSON.parse(fs.readFileSync(packageInfoPath));
-        if (!fs.existsSync(gitPath)) continue;
         const stat2 = await fs.promises.stat(gitPath);
-        if (!stat2.isDirectory()) continue;
+        if (!(fs.existsSync(gitPath) && stat2.isDirectory())) continue;
         const output = await executeShellCommands(
           `"./shell.sh" ${dirPath} ${branch}`
         );
