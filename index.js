@@ -24,7 +24,7 @@ const executeShellCommands = (cmd, options = {}) => {
   });
 };
 
-const getData = async (branch = "master", authors = "") => {
+const getData = async (branch = "master") => {
   const arrs = [];
   const files = await fs.promises.readdir(root);
   return new Promise(async (resolve) => {
@@ -40,9 +40,8 @@ const getData = async (branch = "master", authors = "") => {
         if (!fs.existsSync(gitPath)) continue;
         const stat2 = await fs.promises.stat(gitPath);
         if (!stat2.isDirectory()) continue;
-        const _authors = authors.split("|").join(" ");
         const output = await executeShellCommands(
-          `"./shell.sh" ${dirPath} ${branch} ${_authors}`
+          `"./shell.sh" ${dirPath} ${branch}`
         );
         console.log(packageInfo?.name, branch, output);
         arrs.push(`${packageInfo?.name};${output}`);
@@ -56,7 +55,7 @@ const getData = async (branch = "master", authors = "") => {
 
 const main = async () => {
   // 填写分支, 默认 origin/master
-  const master = await getData("origin/master", "cary|wangzhangsheng");
+  const master = await getData("origin/master");
   fs.writeFileSync("./table.txt", master.join(""));
 };
 
