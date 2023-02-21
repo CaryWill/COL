@@ -1,11 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
-const { resolve } = require("path");
 
 // 填写存放了所有项目仓库的地方
-const root = "/Users/cary/Desktop/test";
-// const root = "/Users/cary/workspace/gitlab";
+// const root = "/Users/cary/Desktop/test";
+const root = "/Users/cary/workspace/gitlab";
 const executeShellCommands = (cmd, options = {}) => {
   return new Promise((res, rej) => {
     exec(
@@ -46,7 +45,7 @@ const getData = async (branch = "master", authors = "") => {
           `"./shell.sh" ${dirPath} ${branch} ${_authors}`
         );
         console.log(packageInfo?.name, branch, output);
-        arrs.push(`${packageInfo?.name} ${output}`);
+        arrs.push(`${packageInfo?.name};${output}`);
       } catch (e) {
         console.log(e);
       }
@@ -56,9 +55,9 @@ const getData = async (branch = "master", authors = "") => {
 };
 
 const main = async () => {
+  // 填写分支, 默认 origin/master
   const master = await getData("origin/master", "cary|wangzhangsheng");
-  // const private = await getData("origin/trunk-private", "cary|wangzhangsheng");
-  fs.writeFileSync("./table.txt", [...master].join(""));
+  fs.writeFileSync("./table.txt", master.join(""));
 };
 
 try {
