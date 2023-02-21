@@ -34,16 +34,17 @@ const getData = async (branch = "master", arrs = [], dir = root) => {
         if (!stat.isDirectory()) continue;
         const gitPath = path.join(dirPath, ".git/");
         if (fs.existsSync(gitPath)) {
+          if (dirPath.includes(" ")) {
+            console.log("暂时不支持文件夹名带空格的");
+            continue;
+          }
           const output = await executeShellCommands(
             `"./shell.sh" ${dirPath} ${branch}`
           );
           const packageInfoPath = path.join(dirPath, "package.json");
-          let packageInfo = {};
-          if (!fs.existsSync(packageInfoPath)) {
-            packageInfo = {};
-          } else {
-            packageInfo = JSON.parse(fs.readFileSync(packageInfoPath));
-          }
+          let packageInfo = fs.existsSync(packageInfoPath)
+            ? JSON.parse(fs.readFileSync(packageInfoPath))
+            : {};
           console.log(packageInfo?.name, branch, output);
           arrs.push(`${packageInfo?.name};${output}`);
         } else {
