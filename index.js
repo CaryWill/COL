@@ -24,7 +24,7 @@ const executeShellCommands = (cmd, options = {}) => {
   });
 };
 
-const getData = async (branch = "master", arrs = [], dir = root) => {
+const getData = async (branch = "origin/master", arrs = [], dir = root) => {
   const files = await fs.promises.readdir(dir);
   return new Promise(async (resolve) => {
     for (const file of files) {
