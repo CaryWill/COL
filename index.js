@@ -3,8 +3,8 @@ const path = require("path");
 const { exec } = require("child_process");
 
 // 填写存放了所有项目仓库的地方
-const root = "/Users/cary/Desktop/test";
-// const root = "/Users/cary/workspace/gitlab";
+// const root = "/Users/cary/Desktop/test";
+const root = "/Users/cary/workspace/gitlab";
 const executeShellCommands = (cmd, options = {}) => {
   return new Promise((res, rej) => {
     exec(
@@ -42,11 +42,14 @@ const getData = async (branch = "origin/master", arrs = [], dir = root) => {
             `"./shell.sh" ${dirPath} ${branch}`
           );
           const packageInfoPath = path.join(dirPath, "package.json");
-          let packageInfo = fs.existsSync(packageInfoPath)
-            ? JSON.parse(fs.readFileSync(packageInfoPath))
-            : {};
+          let packageInfo = { name: "err" };
+          try {
+            packageInfo = fs.existsSync(packageInfoPath)
+              ? JSON.parse(fs.readFileSync(packageInfoPath))
+              : {};
+          } catch (e) {}
           console.log(packageInfo?.name, branch, output);
-          arrs.push(`${packageInfo?.name};${output}`);
+          arrs.push(`${packageInfo?.name};${dirPath};${output}`);
         } else {
           const nested = await getData(branch, arrs, dirPath);
           arrs.concat(nested);
@@ -61,7 +64,9 @@ const getData = async (branch = "origin/master", arrs = [], dir = root) => {
 
 const main = async () => {
   // 填写分支, 默认 origin/master
-  const master = await getData("origin/master", [], root);
+  const branch = "origin/master";
+  // const branch = "origin/trunk-private-1230";
+  const master = await getData(branch, [], root);
   fs.writeFileSync("./table.txt", master.join(""));
 };
 
