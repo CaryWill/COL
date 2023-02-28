@@ -8,7 +8,7 @@
 变量，比如我的仓库全部放在 "/Users/cary/workspace/gitlab" 这个路径下面，然后执行
 下面的脚本，它会遍历上面 root 路径下面所有的文件夹然后进行统计，最终生成一个
 table.txt 文件,格式是 `package.name;path;added lines;deleted lines;added -
-deleted lines`，然后将文件复制到 excel 里面以 ; 进行分割就行了。
+deleted lines`，然后将文件复制到 excel 里面以 ; (分号) 进行分割就行了。
 
 ```shell
 node index.js
