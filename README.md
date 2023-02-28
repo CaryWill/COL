@@ -2,6 +2,14 @@
 
 默认从 origin/master 读取代码行数，读取之前会默认执行 git fetch 来保证代码是最新的。
 
+1. 替换路径
+
+打开 index.js 文件，替换 const root = "/Users/cary/workspace/gitlab"; 的 root
+变量，比如我的仓库全部放在 "/Users/cary/workspace/gitlab" 这个路径下面，然后执行
+下面的脚本，它会遍历上面 root 路径下面所有的文件夹然后进行统计，最终生成一个
+table.txt 文件。
+
+
 ```shell
 1. node index.js
 ```
