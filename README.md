@@ -11,7 +11,7 @@ table.txt 文件。
 
 
 ```shell
-1. node index.js
+node index.js
 ```
 
 ## TODO 
