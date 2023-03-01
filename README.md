@@ -22,3 +22,4 @@ node index.js
 - [x] nested folder, only first level dir will be searched for now
 - [x] nested folder, but if it contains whitespace, it'll not work right
 - [ ] backup git origin before change incase changed origin is not right
+- [ ] root dir already tracked by git
